@@ -60,7 +60,7 @@ cp .env.example .env            # or create it manually
 ```env
 ANTHROPIC_API_KEY=sk-ant-...          # required — your Anthropic API key
 ANTHROPIC_MODEL=claude-sonnet-4-6     # optional — defaults to claude-sonnet-4-6
-PATIENT_API_BASE=http://127.0.0.1:5000 # optional — defaults to http://127.0.0.1:5000
+PATIENT_API_BASE=http://localhost:8000 # optional — defaults to http://localhost:8000
 ```
 
 > Get your API key at [console.anthropic.com](https://console.anthropic.com).
@@ -68,17 +68,9 @@ PATIENT_API_BASE=http://127.0.0.1:5000 # optional — defaults to http://127.0.0
 
 ---
 
-## Running the App (3 terminals)
+## Running the App (2 terminals)
 
-### Terminal 1 — Flask patient API
-
-```bash
-source venv/bin/activate
-python api/flask-app.py
-# Runs on http://127.0.0.1:5000
-```
-
-### Terminal 2 — FastAPI agent server
+### Terminal 1 — FastAPI agent server
 
 ```bash
 source venv/bin/activate
@@ -86,7 +78,7 @@ uvicorn server.main:app --reload --port 8000
 # Runs on http://localhost:8000
 ```
 
-### Terminal 3 — Chat UI
+### Terminal 2 — Chat UI
 
 Just open the file in your browser — no build step needed:
 
@@ -140,4 +132,4 @@ curl -X POST http://localhost:8000/chat \
 |---|---|---|---|
 | `ANTHROPIC_API_KEY` | Yes | — | Anthropic API key for Claude |
 | `ANTHROPIC_MODEL` | No | `claude-sonnet-4-6` | Claude model ID to use |
-| `PATIENT_API_BASE` | No | `http://127.0.0.1:5000` | Base URL of the Flask patient API |
+| `PATIENT_API_BASE` | No | `http://localhost:8000` | Base URL of the Flask patient API |

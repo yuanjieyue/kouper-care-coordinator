@@ -58,11 +58,41 @@ class ChatResponse(BaseModel):
     session_id: str
 
 
+# Static patient records — replace with a real DB/EHR lookup in production.
+_PATIENTS: dict[int, dict] = {
+    1: {
+        "id": 1,
+        "name": "John Doe",
+        "dob": "01/01/1975",
+        "pcp": "Dr. Meredith Grey",
+        "ehrId": "1234abcd",
+        "referred_providers": [
+            {"provider": "House, Gregory MD", "specialty": "Orthopedics"},
+            {"specialty": "Primary Care"},
+        ],
+        "appointments": [
+            {"date": "3/05/18",  "time": "9:15am",  "provider": "Dr. Meredith Grey",  "status": "completed"},
+            {"date": "8/12/24",  "time": "2:30pm",  "provider": "Dr. Gregory House",  "status": "completed"},
+            {"date": "9/17/24",  "time": "10:00am", "provider": "Dr. Meredith Grey",  "status": "noshow"},
+            {"date": "11/25/24", "time": "11:30am", "provider": "Dr. Meredith Grey",  "status": "cancelled"},
+        ],
+    },
+}
+
+
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @app.get("/health")
 def health():
     return {"status": "ok", "model": MODEL}
+
+
+@app.get("/patient/{patient_id}")
+def get_patient(patient_id: int):
+    patient = _PATIENTS.get(patient_id)
+    if patient is None:
+        raise HTTPException(status_code=404, detail=f"Patient {patient_id} not found.")
+    return patient
 
 
 @app.post("/chat", response_model=ChatResponse)
