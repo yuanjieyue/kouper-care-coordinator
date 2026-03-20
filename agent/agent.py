@@ -98,7 +98,6 @@ def process_message(
         next turn to maintain conversation context.
     """
     client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
-
     # Inject the patient ID into the first user message so the agent always
     # knows who it is talking to without requiring the caller to re-state it.
     if not history:

@@ -30,13 +30,8 @@ A conversational AI assistant that helps nurses book appointments for patients. 
 ### 1. Clone the repo
 
 ```bash
-<<<<<<< HEAD
 git clone https://github.com/yuanjieyue/kouper-care-coordinator.git
-cd MLChallenge
-=======
-git clone <repo-url>
 cd kouper-care-coordinator
->>>>>>> c03fccd (add git load dotenv to load environment variables there)
 ```
 
 ### 2. Create and activate a virtual environment
@@ -92,7 +87,6 @@ python api/flask-app.py
 
 ```bash
 source venv/bin/activate
-export $(cat .env | xargs)
 uvicorn server.main:app --reload --port 8000
 # Runs on http://localhost:8000
 ```

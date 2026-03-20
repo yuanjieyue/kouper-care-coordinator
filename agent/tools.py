@@ -25,7 +25,6 @@ from agent.data_sheet import (
 )
 
 PATIENT_API_BASE = os.getenv("PATIENT_API_BASE", "http://localhost:5000")
-
 # Simulated booking store — keyed by booking ID
 _bookings: dict[str, dict] = {}
 
