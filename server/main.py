@@ -14,9 +14,9 @@ from dotenv import load_dotenv
 load_dotenv()
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 
 UI_INDEX = Path(__file__).parent.parent / "ui" / "index.html"
@@ -87,8 +87,11 @@ _PATIENTS: dict[int, dict] = {
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @app.get("/")
-def serve_ui():
-    return FileResponse(UI_INDEX)
+def serve_ui(request: Request):
+    html = UI_INDEX.read_text()
+    base_url = str(request.base_url).rstrip("/")
+    html = html.replace("__API_BASE__", base_url)
+    return HTMLResponse(html)
 
 
 @app.get("/health")

@@ -1,6 +1,6 @@
 # Kouper Health — Care Coordinator AI
 
-A conversational AI assistant that helps nurses book appointments for patients. Built as a take-home challenge, it combines a Flask patient-data API, a FastAPI + Claude-powered agent backend, and a plain-HTML chat UI. The agent uses Claude's tool-use API to look up patient records, find matching providers, determine appointment type (new vs. established), check available slots, and confirm bookings — never guessing from memory.
+A conversational AI assistant that helps nurses book appointments for patients. Built as a take-home challenge, it combines a FastAPI + Claude-powered agent backend with a chat UI served from the same process. The agent uses Claude's tool-use API to look up patient records, find matching providers, determine appointment type (new vs. established), check available slots, and confirm bookings — never guessing from memory.
 
 ---
 
@@ -8,16 +8,14 @@ A conversational AI assistant that helps nurses book appointments for patients. 
 
 ```
 .
-├── api/
-│   └── flask-app.py      # Flask patient data API (port 5000)
 ├── agent/
 │   ├── agent.py          # Claude agent loop (tool-use orchestration)
 │   ├── tools.py          # Tool implementations + Anthropic schemas
 │   └── data_sheet.py     # Provider directory, insurance, scheduling rules
 ├── server/
-│   └── main.py           # FastAPI server — /chat and /health (port 8000)
+│   └── main.py           # FastAPI server — /, /chat, /health, /patient/{id} (port 8000)
 ├── ui/
-│   └── index.html        # Chat UI (open directly in browser)
+│   └── index.html        # Chat UI (served at GET /)
 ├── data_sheet.txt        # Source provider/insurance data
 ├── requirements.txt
 └── .env                  # (you create this — see below)
@@ -46,7 +44,6 @@ source venv/bin/activate        # macOS / Linux
 
 ```bash
 pip install -r requirements.txt
-pip install flask               # Flask is not in requirements.txt
 ```
 
 ### 4. Create a `.env` file
@@ -65,36 +62,22 @@ PATIENT_API_BASE=http://localhost:8000 # optional — defaults to http://localho
 
 > Get your API key at [console.anthropic.com](https://console.anthropic.com).
 
-
 ---
 
-## Running the App (2 terminals)
-
-### Terminal 1 — FastAPI agent server
+## Running the App
 
 ```bash
 source venv/bin/activate
 uvicorn server.main:app --reload --port 8000
-# Runs on http://localhost:8000
 ```
 
-### Terminal 2 — Chat UI
-
-Just open the file in your browser — no build step needed:
-
-```bash
-open ui/index.html          # macOS
-# xdg-open ui/index.html   # Linux
-# start ui/index.html       # Windows
-```
-
-Or navigate to the file path directly in your browser: `file:///path/to/MLChallenge/ui/index.html`
+Then open **http://localhost:8000** — the chat UI is served directly from the FastAPI server.
 
 ---
 
 ## Quick Test Scenarios
 
-Make sure all three services are running, then try these in the chat UI with **Patient ID: 1** (John Doe):
+Try these in the chat UI with **Patient ID: 1** (John Doe):
 
 | Scenario | What to type |
 |---|---|
@@ -107,11 +90,14 @@ Make sure all three services are running, then try these in the chat UI with **P
 
 The agent will walk through provider lookup → slot availability → confirmation before booking. It will always ask you to confirm before finalizing.
 
-You can also hit the FastAPI endpoints directly:
+You can also hit the endpoints directly:
 
 ```bash
 # Health check
 curl http://localhost:8000/health
+
+# Patient record
+curl http://localhost:8000/patient/1
 
 # Start a conversation
 curl -X POST http://localhost:8000/chat \
@@ -132,4 +118,4 @@ curl -X POST http://localhost:8000/chat \
 |---|---|---|---|
 | `ANTHROPIC_API_KEY` | Yes | — | Anthropic API key for Claude |
 | `ANTHROPIC_MODEL` | No | `claude-sonnet-4-6` | Claude model ID to use |
-| `PATIENT_API_BASE` | No | `http://localhost:8000` | Base URL of the Flask patient API |
+| `PATIENT_API_BASE` | No | `http://localhost:8000` | Base URL of the patient data endpoint |
