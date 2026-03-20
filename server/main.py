@@ -11,6 +11,7 @@ import uuid
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 logging.basicConfig(
@@ -23,6 +24,16 @@ logger = logging.getLogger("care_coordinator")
 from agent.agent import MODEL, process_message
 
 app = FastAPI(title="Kouper Health Care Coordinator", version="0.1.0")
+
+# CORS — allow all origins during development so the UI can be opened directly
+# from the filesystem (file://) or any localhost port.
+# TODO: restrict allow_origins to the specific frontend URL before production deployment.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
 
 # In-memory session store: { session_id: { "patient_id": int, "history": list } }
 # Swap for Redis or a DB-backed store in production.
