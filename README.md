@@ -65,11 +65,6 @@ PATIENT_API_BASE=http://localhost:5000 # optional — defaults to http://localho
 
 > Get your API key at [console.anthropic.com](https://console.anthropic.com).
 
-Load the env vars before starting the servers:
-
-```bash
-export $(cat .env | xargs)
-```
 
 ---
 
@@ -134,7 +129,7 @@ curl -X POST http://localhost:8000/chat \
 # Continue the session (use the session_id from the response above)
 curl -X POST http://localhost:8000/chat \
   -H "Content-Type: application/json" \
-  -d '{"patient_id": 1, "session_id": "<session_id>", "message": "Book the first available slot."}'
+  -d '{"patient_id": 1, "session_id": "139caa79-d0e0-423f-89c7-386af57235b8", "message": "Book the first available slot."}'
 ```
 
 ---
@@ -145,4 +140,4 @@ curl -X POST http://localhost:8000/chat \
 |---|---|---|---|
 | `ANTHROPIC_API_KEY` | Yes | — | Anthropic API key for Claude |
 | `ANTHROPIC_MODEL` | No | `claude-sonnet-4-6` | Claude model ID to use |
-| `PATIENT_API_BASE` | No | `http://localhost:5000` | Base URL of the Flask patient API |
+| `PATIENT_API_BASE` | No | `http://127.0.0.1:5000` | Base URL of the Flask patient API |

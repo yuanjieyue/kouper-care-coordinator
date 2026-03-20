@@ -18,10 +18,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
+for _noisy in ("httpx", "httpcore", "anthropic"):
+    logging.getLogger(_noisy).setLevel(logging.WARNING)
 logger = logging.getLogger("care_coordinator")
 
 from agent.agent import MODEL, process_message
