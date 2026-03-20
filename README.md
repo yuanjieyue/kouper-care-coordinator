@@ -30,7 +30,7 @@ A conversational AI assistant that helps nurses book appointments for patients. 
 ### 1. Clone the repo
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/yuanjieyue/kouper-care-coordinator.git
 cd MLChallenge
 ```
 
