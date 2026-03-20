@@ -8,6 +8,7 @@ Endpoints:
 
 import logging
 import uuid
+from pathlib import Path
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -15,7 +16,10 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
+
+UI_INDEX = Path(__file__).parent.parent / "ui" / "index.html"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -81,6 +85,11 @@ _PATIENTS: dict[int, dict] = {
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
+
+@app.get("/")
+def serve_ui():
+    return FileResponse(UI_INDEX)
+
 
 @app.get("/health")
 def health():
