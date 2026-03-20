@@ -24,7 +24,7 @@ from agent.data_sheet import (
     get_provider_by_name,
 )
 
-PATIENT_API_BASE = os.getenv("PATIENT_API_BASE", "http://localhost:5000")
+PATIENT_API_BASE = os.getenv("PATIENT_API_BASE", "http://127.0.0.1:5000")
 # Simulated booking store — keyed by booking ID
 _bookings: dict[str, dict] = {}
 

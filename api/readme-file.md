@@ -38,17 +38,17 @@ pip install flask
 python app.py
 ```
 
-3. The server will start on `http://localhost:5000`
+3. The server will start on `http://127.0.0.1:5000`
 
 ## Testing the API
 
 You can test the API endpoint using curl or your web browser:
 
 ```bash
-curl http://localhost:5000/patient/{id}
+curl http://127.0.0.1:5000/patient/{id}
 ```
 
-Or simply visit `http://localhost:5000/patient/{id}` in your web browser.
+Or simply visit `http://127.0.0.1:5000/patient/{id}` in your web browser.
 
 ## API Endpoints
 

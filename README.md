@@ -60,7 +60,7 @@ cp .env.example .env            # or create it manually
 ```env
 ANTHROPIC_API_KEY=sk-ant-...          # required — your Anthropic API key
 ANTHROPIC_MODEL=claude-sonnet-4-6     # optional — defaults to claude-sonnet-4-6
-PATIENT_API_BASE=http://localhost:5000 # optional — defaults to http://localhost:5000
+PATIENT_API_BASE=http://127.0.0.1:5000 # optional — defaults to http://127.0.0.1:5000
 ```
 
 > Get your API key at [console.anthropic.com](https://console.anthropic.com).
@@ -75,7 +75,7 @@ PATIENT_API_BASE=http://localhost:5000 # optional — defaults to http://localho
 ```bash
 source venv/bin/activate
 python api/flask-app.py
-# Runs on http://localhost:5000
+# Runs on http://127.0.0.1:5000
 ```
 
 ### Terminal 2 — FastAPI agent server
