@@ -169,6 +169,7 @@ def _execute_tool_calls(content: list) -> list[dict]:
     for block in content:
         if not hasattr(block, "type") or block.type != "tool_use":
             continue
+        print(f"[tool] {block.name} | input: {json.dumps(block.input)}")
         tool_result = execute_tool(block.name, block.input)
         results.append({
             "type": "tool_result",
