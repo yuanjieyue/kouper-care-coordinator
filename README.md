@@ -23,6 +23,38 @@ A conversational AI assistant that helps nurses book appointments for patients. 
 
 ---
 
+## Architecture
+
+Everything runs as a single FastAPI process. The browser talks only to that server; all data lookups happen server-side.
+
+```
+Nurse (Browser)
+      |
+      | POST /chat  (message + patient_id)
+      v
+ FastAPI server (server/main.py)
+      |
+      |-- GET /patient/{id} ──────────> Patient data (in-process, _PATIENTS dict)
+      |
+      |-- data_sheet.py ──────────────> Provider directory, insurance & scheduling rules
+      |
+      |-- Anthropic Claude API ───────> LLM reasoning + tool-use loop
+      |        |
+      |        |-- tool: get_patient_info
+      |        |-- tool: find_providers
+      |        |-- tool: check_appointment_type
+      |        |-- tool: get_available_slots
+      |        `-- tool: book_appointment
+      |
+      | ChatResponse (reply + session_id)
+      v
+Nurse (Browser)
+```
+
+Session history is held in memory on the server (`_sessions` dict), so the agent maintains context across multiple turns without re-sending the full history from the client.
+
+---
+
 ## Setup
 
 ### 1. Clone the repo
@@ -87,6 +119,9 @@ Try these in the chat UI with **Patient ID: 1** (John Doe):
 | Full booking flow | `Book an orthopedics appointment with Dr. House for next Tuesday morning.` |
 | Insurance question | `Does the patient's insurance cover the orthopedics visit?` |
 | Primary care follow-up | `I need to schedule a follow-up with Dr. Meredith Grey.` |
+| Check all accepted insurances | `What insurance plans do you accept?` |
+| Provider location and hours | `Where is Dr. House located and what are his hours?` |
+| Self-pay cost question | `How much does an orthopedics visit cost without insurance?` |
 
 The agent will walk through provider lookup → slot availability → confirmation before booking. It will always ask you to confirm before finalizing.
 
